@@ -1,0 +1,23 @@
+{
+  "name": "iscale_se_exam",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "test": "node index.js --username test10@bge.me --password passw0rd",
+    "start": "npm run tsc && npm run test"
+  },
+  "author": "Jethro Cabaluna",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/minimist": "^1.2.0",
+    "@types/node": "^12.7.7",
+    "@types/puppeteer": "^1.19.1",
+    "typescript": "^3.6.3"
+  },
+  "dependencies": {
+    "minimist": "^1.2.0",
+    "puppeteer": "^1.20.0"
+  }
+}
