@@ -191,6 +191,110 @@ function createModal(page) {
                     return [4 /*yield*/, page.screenshot({ path: './screenshots/modal_naming.png' })];
                 case 9:
                     _a.sent();
+                    return [4 /*yield*/, Promise.all([
+                            page.click('.ant-modal-content .ant-btn.ant-btn-primary'),
+                            page.waitForNavigation({ waitUntil: 'networkidle2' })
+                        ])];
+                case 10:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function selectBlue(page) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, page.waitForSelector('#cta_button\\[color\\]', {
+                        visible: true,
+                    })];
+                case 1:
+                    _a.sent();
+                    return [4 /*yield*/, page.$eval('#cta_button\\[color\\]', function (el) {
+                            el.scrollIntoView();
+                            window.scrollBy(0, -300);
+                        })];
+                case 2:
+                    _a.sent();
+                    return [4 /*yield*/, page.$eval('#cta_button\\[color\\] .ant-select-selection-selected-value', function (el) {
+                            el.textContent = 'Blue';
+                            el.setAttribute('title', 'Blue');
+                        })];
+                case 3:
+                    _a.sent();
+                    return [4 /*yield*/, page.screenshot({ path: './screenshots/select_blue.png' })];
+                case 4:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function changeBehavior(page) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, Promise.all([
+                        page.click('.plugin-editor-tab .ant-tabs-tab:nth-child(2)'),
+                        page.waitForNavigation({ waitUntil: 'networkidle2' })
+                    ])];
+                case 1:
+                    _a.sent();
+                    // .ant-tag.ant-tag-green.ant-dropdown-trigger.m-r-md.rule-options.rule-ctr
+                    return [4 /*yield*/, page.click('.ant-tag.ant-tag-green.ant-dropdown-trigger.m-r-md.rule-options.rule-ctr')];
+                case 2:
+                    // .ant-tag.ant-tag-green.ant-dropdown-trigger.m-r-md.rule-options.rule-ctr
+                    _a.sent();
+                    return [4 /*yield*/, page.screenshot({ path: './screenshots/select_timing.png' })];
+                case 3:
+                    _a.sent();
+                    return [4 /*yield*/, page.click('.ant-dropdown.ant-dropdown-placement-bottomLeft:not([class*=hidden]) .ant-dropdown-menu-item:nth-child(3)')];
+                case 4:
+                    _a.sent();
+                    return [4 /*yield*/, page.screenshot({ path: './screenshots/changed_timing.png' })];
+                case 5:
+                    _a.sent();
+                    return [4 /*yield*/, page.click('.shopmsg-header.shopmsg-header-wide.shopmsg-header-inverted.ant-layout-header .ant-btn.ant-btn-primary')];
+                case 6:
+                    _a.sent();
+                    return [4 /*yield*/, page.waitForSelector('.ant-message-custom-content.ant-message-success', {
+                            visible: true,
+                        })];
+                case 7:
+                    _a.sent();
+                    return [4 /*yield*/, page.screenshot({ path: './screenshots/saved_modal.png' })];
+                case 8:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function publish(page) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, Promise.all([
+                        page.click('.shopmsg-header.shopmsg-header-wide.ant-layout-header .ant-btn.ant-btn-primary'),
+                        page.waitForNavigation({ waitUntil: 'networkidle2' })
+                    ])];
+                case 1:
+                    _a.sent();
+                    return [4 /*yield*/, page.click('.shopmsg-header.shopmsg-header-wide.ant-layout-header .ant-btn.ant-btn-primary')];
+                case 2:
+                    _a.sent();
+                    return [4 /*yield*/, page.waitForSelector('.ant-modal-content .ant-btn.ant-btn-primary', {
+                            visible: true,
+                        })];
+                case 3:
+                    _a.sent();
+                    return [4 /*yield*/, page.screenshot({ path: './screenshots/publish_modal.png' })];
+                case 4:
+                    _a.sent();
+                    return [4 /*yield*/, page.click('.ant-modal-content .ant-btn.ant-btn-primary')];
+                case 5:
+                    _a.sent();
                     return [2 /*return*/];
             }
         });
@@ -203,7 +307,7 @@ if (!validateCredentials()) {
     var browser, page, dashboardUrl, id;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, puppeteer_1.default.launch()];
+            case 0: return [4 /*yield*/, puppeteer_1.default.launch({ headless: false })];
             case 1:
                 browser = _a.sent();
                 return [4 /*yield*/, browser.newPage()];
@@ -223,8 +327,17 @@ if (!validateCredentials()) {
                 return [4 /*yield*/, createModal(page)];
             case 6:
                 _a.sent();
-                return [4 /*yield*/, browser.close()];
+                return [4 /*yield*/, selectBlue(page)];
             case 7:
+                _a.sent();
+                return [4 /*yield*/, changeBehavior(page)];
+            case 8:
+                _a.sent();
+                return [4 /*yield*/, publish(page)];
+            case 9:
+                _a.sent();
+                return [4 /*yield*/, browser.close()];
+            case 10:
                 _a.sent();
                 return [2 /*return*/];
         }

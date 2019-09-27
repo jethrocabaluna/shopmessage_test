@@ -83,6 +83,64 @@ async function createModal(page: puppeteer.Page) {
     const modalTitle = ` - ${today.getFullYear()}.${today.getMonth() + 1}.${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
     await page.type('.ant-form.ant-form-vertical.ant-form-hide-required-mark input', modalTitle)
     await page.screenshot({path: './screenshots/modal_naming.png'})
+
+    await Promise.all([
+        page.click('.ant-modal-content .ant-btn.ant-btn-primary'),
+        page.waitForNavigation({ waitUntil: 'networkidle2' })
+    ]);
+}
+
+async function selectBlue(page: puppeteer.Page) {
+    await page.waitForSelector('#cta_button\\[color\\]', {
+        visible: true,
+    });
+
+    await page.$eval('#cta_button\\[color\\]', el => {
+        el.scrollIntoView()
+        window.scrollBy(0, -300)
+    })
+
+    await page.$eval('#cta_button\\[color\\] .ant-select-selection-selected-value', el => {
+        el.textContent = 'Blue'
+        el.setAttribute('title', 'Blue')
+    })
+    await page.screenshot({path: './screenshots/select_blue.png'})
+}
+
+async function changeBehavior(page: puppeteer.Page) {
+    await Promise.all([
+        page.click('.plugin-editor-tab .ant-tabs-tab:nth-child(2)'),
+        page.waitForNavigation({ waitUntil: 'networkidle2' })
+    ]);
+
+    await page.click('.ant-tag.ant-tag-green.ant-dropdown-trigger.m-r-md.rule-options.rule-ctr')
+    await page.screenshot({path: './screenshots/select_timing.png'})
+
+    await page.click('.ant-dropdown.ant-dropdown-placement-bottomLeft:not([class*=hidden]) .ant-dropdown-menu-item:nth-child(3)')
+    await page.screenshot({path: './screenshots/changed_timing.png'})
+
+    await page.click('.shopmsg-header.shopmsg-header-wide.shopmsg-header-inverted.ant-layout-header .ant-btn.ant-btn-primary')
+
+    await page.waitForSelector('.ant-message-custom-content.ant-message-success', {
+        visible: true,
+    });
+    await page.screenshot({path: './screenshots/saved_modal.png'})
+}
+
+async function publish(page: puppeteer.Page) {
+    await Promise.all([
+        page.click('.shopmsg-header.shopmsg-header-wide.ant-layout-header .ant-btn.ant-btn-primary'),
+        page.waitForNavigation({ waitUntil: 'networkidle2' })
+    ]);
+
+    await page.click('.shopmsg-header.shopmsg-header-wide.ant-layout-header .ant-btn.ant-btn-primary')
+
+    await page.waitForSelector('.ant-modal-content .ant-btn.ant-btn-primary', {
+        visible: true,
+    });
+    await page.screenshot({path: './screenshots/publish_modal.png'})
+
+    await page.click('.ant-modal-content .ant-btn.ant-btn-primary')
 }
 
 if (!validateCredentials()) {
@@ -90,7 +148,7 @@ if (!validateCredentials()) {
 }
 
 (async () => {
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch({ headless: false })
     const page = await browser.newPage()
 
     await login(page)
@@ -99,6 +157,9 @@ if (!validateCredentials()) {
     await goToDashboard(page, dashboardUrl, id)
     await navigateGrowthPlugins(page, dashboardUrl, id)
     await createModal(page)
+    await selectBlue(page)
+    await changeBehavior(page)
+    await publish(page)
 
     await browser.close()
 })()
